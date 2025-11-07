@@ -1,3 +1,68 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;800&display=swap');
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+@layer base {
+	html, body, #root {
+		height: 100%;
+	}
+	body {
+		@apply bg-gray-50 text-gray-800 font-sans;
+		font-feature-settings: "tnum" 1, "lnum" 1;
+	}
+	h1, h2, h3, h4, h5 { @apply font-semibold }
+}
+
+@layer components {
+	.card {
+		@apply bg-white rounded-lg shadow-md p-4;
+	}
+
+	.card-accent-left {
+		@apply border-l-4 border-brand-blue-500;
+	}
+
+	.card-hero {
+		@apply bg-gradient-to-r from-brand-blue-50 via-white to-white rounded-xl p-4 shadow-lg;
+	}
+
+	.btn-primary {
+		@apply inline-flex items-center gap-2 bg-brand-blue-500 text-white px-3 py-1 rounded-md hover:bg-brand-blue-700;
+	}
+
+	.badge-yellow {
+		@apply inline-block bg-brand-yellow-100 text-brand-yellow-700 px-2 py-0.5 rounded-full text-xs;
+	}
+}
+
+/* small responsive tweaks for cards */
+@media (min-width: 640px) {
+	.card-grid-sm { grid-template-columns: repeat(2, minmax(0,1fr)); }
+}
+
+	/* Hover/interaction polish */
+	@layer components {
+		.card-hover {
+			@apply transform transition-all duration-200;
+		}
+		.card-hover:hover {
+			@apply -translate-y-1 shadow-xl;
+		}
+
+		.detail-image {
+			@apply rounded-lg object-cover w-full h-56;
+		}
+
+		.detail-panel {
+			@apply bg-white rounded-xl shadow-2xl p-6 max-w-3xl w-full;
+		}
+	}
+
+		/* Card accessible focus state */
+		@layer components {
+			.card:focus {
+				@apply outline-none ring-2 ring-brand-blue-300;
+			}
+		}

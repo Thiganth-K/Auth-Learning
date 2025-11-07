@@ -1,0 +1,18 @@
+☐ change the favicon and the logo 
+☐ use react icons for neat references
+☐ add equipments and labs from the actual content
+☐ change the typography to a more professional one (blue, yellow, white) 
+☐ design the cards of the equipments and the labs
+☐ add the time feature for the labs and the equipments booking
+☐ add a pop-up for the detailed view of the lab and the equipments
+☐ add a search bar to search for equipments and labs
+☐ add a filter feature to filter equipments and labs based on categories
+☐ admin dashboard layout design 
+☐ add popup for the cta's
+☐ send a invoice to the user after booking (labs and equipments)
+✔ add user profile section @done (11/7/2025, 7:32:53 PM)
+✔ add notification feature for booking status and admin side updates @done (11/7/2025, 7:32:50 PM)
+☐ make the website responsive for mobile and tablet views
+☐ implement dark mode feature
+☐ add the time details in the booking for the client side
+☐ add loading spinners for better UX during data fetch
