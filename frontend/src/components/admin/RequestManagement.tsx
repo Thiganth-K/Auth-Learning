@@ -44,7 +44,9 @@ export default function RequestManagement({ requests, onUpdateStatus }: RequestM
                 </div>
               </div>
               <div className="text-xs text-gray-600 mt-1">{r.userName} — {r.userEmail}</div>
-              <div className="text-xs text-gray-600">{r.startDate} → {r.endDate}</div>
+              <div className="text-xs text-gray-600">
+                {r.startDate} {r.startTime || '(no time)'} → {r.endDate} {r.endTime || '(no time)'}
+              </div>
               <div className="mt-2">
                 <textarea 
                   placeholder="Admin note (optional)" 

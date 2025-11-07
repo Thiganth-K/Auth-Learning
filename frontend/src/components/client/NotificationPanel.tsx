@@ -65,7 +65,9 @@ export default function NotificationPanel({ user, requests, isOpen, onClose }: N
                     <div className="text-xs text-gray-600 space-y-1">
                       <div className="flex items-center gap-1">
                         <FaCalendar className="text-gray-400" />
-                        <span>{request.startDate} → {request.endDate}</span>
+                        <span>
+                          {request.startDate} {request.startTime || '(no time)'} → {request.endDate} {request.endTime || '(no time)'}
+                        </span>
                       </div>
                       <div className="text-xs text-gray-500">
                         Requested: {new Date(request.createdAt).toLocaleDateString()}

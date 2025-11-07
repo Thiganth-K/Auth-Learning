@@ -20,6 +20,8 @@ export type RentalRequest = {
   userName: string
   startDate: string
   endDate: string
+  startTime: string
+  endTime: string
   status: 'pending' | 'approved' | 'disapproved'
   adminNote?: string
   createdAt: string

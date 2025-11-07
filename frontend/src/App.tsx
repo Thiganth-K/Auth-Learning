@@ -25,6 +25,8 @@ export default function App() {
   const [requesting, setRequesting] = useState<Equipment | null>(null)
   const [rentStart, setRentStart] = useState('')
   const [rentEnd, setRentEnd] = useState('')
+  const [rentStartTime, setRentStartTime] = useState('')
+  const [rentEndTime, setRentEndTime] = useState('')
   // details popup
   const [selectedDetail, setSelectedDetail] = useState<Equipment | null>(null)
 
@@ -118,12 +120,16 @@ export default function App() {
     setRequesting(null)
     setRentStart('')
     setRentEnd('')
+    setRentStartTime('')
+    setRentEndTime('')
   }
 
   const openRequest = (eq: Equipment) => {
     setRequesting(eq)
     setRentStart('')
     setRentEnd('')
+    setRentStartTime('')
+    setRentEndTime('')
   }
 
   const openDetails = (eq: Equipment) => {
@@ -133,7 +139,14 @@ export default function App() {
   const submitRequest = () => {
     if (!user || !requesting) return
     if (!rentStart || !rentEnd) return alert('Please select start and end dates')
-    if (new Date(rentEnd) < new Date(rentStart)) return alert('End date must be after start date')
+    if (!rentStartTime || !rentEndTime) return alert('Please select start and end times')
+    
+    // Create DateTime objects for comparison
+    const startDateTime = new Date(`${rentStart}T${rentStartTime}`)
+    const endDateTime = new Date(`${rentEnd}T${rentEndTime}`)
+    
+    if (endDateTime <= startDateTime) return alert('End date and time must be after start date and time')
+    
     const req: RentalRequest = {
       id: `req_${Date.now()}`,
       equipmentId: requesting.id,
@@ -142,6 +155,8 @@ export default function App() {
       userName: user.name,
       startDate: rentStart,
       endDate: rentEnd,
+      startTime: rentStartTime,
+      endTime: rentEndTime,
       status: 'pending',
       createdAt: new Date().toISOString(),
     }
@@ -151,6 +166,8 @@ export default function App() {
     setRequesting(null)
     setRentStart('')
     setRentEnd('')
+    setRentStartTime('')
+    setRentEndTime('')
     alert('Rental request submitted — admin will review it')
   }
 
@@ -214,8 +231,12 @@ export default function App() {
           equipment={requesting}
           rentStart={rentStart}
           rentEnd={rentEnd}
+          rentStartTime={rentStartTime}
+          rentEndTime={rentEndTime}
           onRentStartChange={setRentStart}
           onRentEndChange={setRentEnd}
+          onRentStartTimeChange={setRentStartTime}
+          onRentEndTimeChange={setRentEndTime}
           onSubmit={submitRequest}
           onClose={() => setRequesting(null)}
         />
