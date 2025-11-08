@@ -15,5 +15,5 @@ export function decodeJwt(token: string) {
 }
 
 export function currency(n: number) {
-  return n.toLocaleString(undefined, { style: 'currency', currency: 'USD' })
+  return n.toLocaleString('en-IN', { style: 'currency', currency: 'INR' })
 }

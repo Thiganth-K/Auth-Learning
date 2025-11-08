@@ -132,18 +132,6 @@ export default function Header({ user, requests, onSignOut, onAdminToggle, onNot
                         </div>
                       </div>
                       
-                      <div className="modal-body space-y-2">
-                        <button className="w-full text-left p-2 hover:bg-gray-50 rounded-lg transition-colors">
-                          My Bookings
-                        </button>
-                        <button className="w-full text-left p-2 hover:bg-gray-50 rounded-lg transition-colors">
-                          Account Settings
-                        </button>
-                        <button className="w-full text-left p-2 hover:bg-gray-50 rounded-lg transition-colors">
-                          Help & Support
-                        </button>
-                      </div>
-                      
                       <div className="modal-footer">
                         <button
                           onClick={() => {

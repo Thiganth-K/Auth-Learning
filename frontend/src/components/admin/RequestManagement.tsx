@@ -122,13 +122,19 @@ export default function RequestManagement({ requests, onUpdateStatus }: RequestM
 
       {request.status === 'pending' && (
         <div className="mt-4 space-y-3">
-          <textarea 
-            placeholder="Add admin note (optional)" 
-            value={adminNotes[request.id] || ''} 
-            onChange={(e) => updateAdminNote(request.id, e.target.value)} 
-            className="w-full border border-gray-300 dark:border-gray-600 rounded-lg p-3 text-sm bg-white dark:bg-gray-800 text-gray-900 dark:text-white focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none"
-            rows={3}
-          />
+          <div>
+            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+              Admin Note (optional)
+            </label>
+            <textarea 
+              placeholder="Add admin note (optional)" 
+              value={adminNotes[request.id] || ''} 
+              onChange={(e) => updateAdminNote(request.id, e.target.value)} 
+              className="form-input"
+              rows={3}
+              maxLength={500}
+            />
+          </div>
           
           <div className="flex gap-3">
             <button 
