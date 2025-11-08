@@ -4,22 +4,106 @@ import type { User, Equipment, RentalRequest } from './types'
 import { decodeJwt } from './types/utils'
 import Header from './components/shared/Header'
 import EquipmentGrid from './components/client/EquipmentGrid'
+import SearchAndFilter from './components/client/SearchAndFilter'
 import NotificationPanel from './components/client/NotificationPanel'
 import DetailsModal from './components/client/DetailsModal'
 import RentRequestModal from './components/client/RentRequestModal'
 import AdminPanel from './components/admin/AdminPanel'
 
 const SAMPLE_EQUIPMENTS: Equipment[] = [
-  { id: 'e1', title: 'Equipment 1', description: 'Multi-purpose equipment 1', pricePerDay: 10.0, image: 'https://via.placeholder.com/160?text=Equipment+1' },
-  { id: 'e2', title: 'Equipment 2', description: 'Multi-purpose equipment 2', pricePerDay: 12.5, image: 'https://via.placeholder.com/160?text=Equipment+2' },
-  { id: 'e3', title: 'Equipment 3', description: 'Multi-purpose equipment 3', pricePerDay: 8.99, image: 'https://via.placeholder.com/160?text=Equipment+3' },
-  { id: 'e4', title: 'Equipment 4', description: 'Multi-purpose equipment 4', pricePerDay: 15.0, image: 'https://via.placeholder.com/160?text=Equipment+4' },
+  { 
+    id: 'e1', 
+    title: 'Advanced Microscopy System', 
+    description: 'High-resolution digital microscope with 4K imaging capabilities, perfect for biological research and material analysis.', 
+    pricePerDay: 75.0, 
+    image: 'https://images.unsplash.com/photo-1581092918484-8313ead0b31f?w=400&h=250&fit=crop', 
+    category: 'equipment' 
+  },
+  { 
+    id: 'e2', 
+    title: 'Chemistry Research Lab', 
+    description: 'Fully equipped chemistry laboratory with fume hoods, analytical instruments, and all safety equipment for advanced research.', 
+    pricePerDay: 120.0, 
+    image: 'https://images.unsplash.com/photo-1582719471384-1c4576f6d99c?w=400&h=250&fit=crop', 
+    category: 'lab' 
+  },
+  { 
+    id: 'e3', 
+    title: 'Professional 3D Printer', 
+    description: 'Industrial-grade 3D printer with multiple material support, ideal for rapid prototyping and custom manufacturing.', 
+    pricePerDay: 45.0, 
+    image: 'https://images.unsplash.com/photo-1581092162384-8987c1d64718?w=400&h=250&fit=crop', 
+    category: 'equipment' 
+  },
+  { 
+    id: 'e4', 
+    title: 'Computer Science Lab', 
+    description: 'Modern computer laboratory with 30 high-performance workstations, specialized software, and networking equipment.', 
+    pricePerDay: 85.0, 
+    image: 'https://images.unsplash.com/photo-1580894894513-541e068a3e2b?w=400&h=250&fit=crop', 
+    category: 'lab' 
+  },
+  { 
+    id: 'e5', 
+    title: 'Precision Analytical Balance', 
+    description: 'Ultra-precise analytical balance with 0.0001g accuracy, essential for accurate measurements in research and quality control.', 
+    pricePerDay: 35.0, 
+    image: 'https://images.unsplash.com/photo-1578662996442-48f60103fc96?w=400&h=250&fit=crop', 
+    category: 'equipment' 
+  },
+  { 
+    id: 'e6', 
+    title: 'Physics Research Laboratory', 
+    description: 'Advanced physics lab with laser systems, particle detection equipment, and quantum measurement tools for cutting-edge research.', 
+    pricePerDay: 150.0, 
+    image: 'https://images.unsplash.com/photo-1567789884554-0b844b597180?w=400&h=250&fit=crop', 
+    category: 'lab' 
+  },
+  { 
+    id: 'e7', 
+    title: 'UV-Vis Spectrophotometer', 
+    description: 'Professional UV-Visible spectrophotometer for analytical chemistry, material science, and quality control applications.', 
+    pricePerDay: 55.0, 
+    image: 'https://images.unsplash.com/photo-1589578228447-e1a4e481c6c8?w=400&h=250&fit=crop', 
+    category: 'equipment' 
+  },
+  { 
+    id: 'e8', 
+    title: 'Biology Research Suite', 
+    description: 'Complete biological research facility with cell culture rooms, incubators, and molecular biology equipment.', 
+    pricePerDay: 110.0, 
+    image: 'https://images.unsplash.com/photo-1559757148-5c350d0d3c56?w=400&h=250&fit=crop', 
+    category: 'lab' 
+  },
+  { 
+    id: 'e9', 
+    title: 'High-Performance Laser Cutter', 
+    description: 'Industrial CO2 laser cutting system with precision controls, perfect for manufacturing, prototyping, and artistic projects.', 
+    pricePerDay: 95.0, 
+    image: 'https://images.unsplash.com/photo-1581093458791-9d42e3a117d4?w=400&h=250&fit=crop', 
+    category: 'equipment' 
+  },
+  { 
+    id: 'e10', 
+    title: 'Materials Testing Laboratory', 
+    description: 'Comprehensive materials science lab with tensile testing machines, hardness testers, and metallographic equipment for materials analysis.', 
+    pricePerDay: 135.0, 
+    image: 'https://images.unsplash.com/photo-1582719508461-905c673771fd?w=400&h=250&fit=crop', 
+    category: 'lab' 
+  }
 ]
 
 export default function App() {
   const [user, setUser] = useState<User | null>(null)
   const [equipments, setEquipments] = useState<Equipment[]>([])
   const [requests, setRequests] = useState<RentalRequest[]>([])
+
+  // Search and filter state
+  const [searchTerm, setSearchTerm] = useState('')
+  const [selectedCategory, setSelectedCategory] = useState<'equipment' | 'lab'>('equipment')
+  
+  // Dark mode state
+  const [darkMode, setDarkMode] = useState(false)
 
   // request UI
   const [requesting, setRequesting] = useState<Equipment | null>(null)
@@ -35,6 +119,23 @@ export default function App() {
   
   // notification UI
   const [showNotificationPanel, setShowNotificationPanel] = useState(false)
+
+  // Dark mode effect
+  useEffect(() => {
+    const savedDarkMode = localStorage.getItem('darkMode')
+    if (savedDarkMode) {
+      setDarkMode(JSON.parse(savedDarkMode))
+    }
+  }, [])
+
+  useEffect(() => {
+    localStorage.setItem('darkMode', JSON.stringify(darkMode))
+    if (darkMode) {
+      document.documentElement.classList.add('dark')
+    } else {
+      document.documentElement.classList.remove('dark')
+    }
+  }, [darkMode])
 
   // Initialize Google Identity Services
   useEffect(() => {
@@ -177,7 +278,14 @@ export default function App() {
   }
 
   const addEquipment = (title: string) => {
-    const next: Equipment = { id: `e_${Date.now()}`, title, description: '', pricePerDay: 0, image: '' }
+    const next: Equipment = { 
+      id: `e_${Date.now()}`, 
+      title, 
+      description: '', 
+      pricePerDay: 0, 
+      image: '',
+      category: 'equipment' // Default to equipment
+    }
     saveEquipments([next, ...equipments])
   }
 
@@ -192,18 +300,32 @@ export default function App() {
     setSelectedDetail(null)
   }
 
-  return (
-    <div className="min-h-screen bg-gray-100 p-6">
-      <div className="max-w-6xl mx-auto">
-        <Header 
-          user={user} 
-          onSignOut={signOut}
-          onAdminToggle={() => setAdminPanelOpen(!adminPanelOpen)}
-          requests={requests}
-          onNotificationToggle={() => setShowNotificationPanel(!showNotificationPanel)}
-        />
+  // Filter and search logic
+  const filteredEquipments = equipments.filter((equipment) => {
+    const matchesSearch = equipment.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
+                         (equipment.description?.toLowerCase().includes(searchTerm.toLowerCase()) ?? false)
+    const matchesCategory = equipment.category === selectedCategory
+    return matchesSearch && matchesCategory
+  })
 
-        {adminPanelOpen ? (
+  const toggleDarkMode = () => {
+    setDarkMode(!darkMode)
+  }
+
+  return (
+    <div className="min-h-screen bg-gray-50 dark:bg-gray-900">
+      <Header 
+        user={user} 
+        onSignOut={signOut}
+        onAdminToggle={() => setAdminPanelOpen(!adminPanelOpen)}
+        requests={requests}
+        onNotificationToggle={() => setShowNotificationPanel(!showNotificationPanel)}
+        darkMode={darkMode}
+        onDarkModeToggle={toggleDarkMode}
+      />
+
+      {adminPanelOpen ? (
+        <div className="max-w-7xl mx-auto px-6">
           <AdminPanel
             equipments={equipments}
             requests={requests}
@@ -211,42 +333,50 @@ export default function App() {
             onUpdateRequestStatus={updateRequestStatus}
             onClose={() => setAdminPanelOpen(false)}
           />
-        ) : (
-          <main>
-            <EquipmentGrid 
-              equipments={equipments} 
-              onEquipmentClick={openDetails} 
-            />
-          </main>
-        )}
+        </div>
+      ) : (
+        <main className="max-w-7xl mx-auto px-6 pb-12">
+          <SearchAndFilter
+            searchTerm={searchTerm}
+            onSearchChange={setSearchTerm}
+            selectedCategory={selectedCategory}
+            onCategoryChange={setSelectedCategory}
+            darkMode={darkMode}
+          />
+          <EquipmentGrid 
+            equipments={filteredEquipments} 
+            onEquipmentClick={openDetails}
+            darkMode={darkMode}
+          />
+        </main>
+      )}
 
-        <NotificationPanel
-          isOpen={showNotificationPanel}
-          onClose={() => setShowNotificationPanel(false)}
-          user={user}
-          requests={requests}
-        />
+      <NotificationPanel
+        isOpen={showNotificationPanel}
+        onClose={() => setShowNotificationPanel(false)}
+        user={user}
+        requests={requests}
+      />
 
-        <RentRequestModal
-          equipment={requesting}
-          rentStart={rentStart}
-          rentEnd={rentEnd}
-          rentStartTime={rentStartTime}
-          rentEndTime={rentEndTime}
-          onRentStartChange={setRentStart}
-          onRentEndChange={setRentEnd}
-          onRentStartTimeChange={setRentStartTime}
-          onRentEndTimeChange={setRentEndTime}
-          onSubmit={submitRequest}
-          onClose={() => setRequesting(null)}
-        />
+      <RentRequestModal
+        equipment={requesting}
+        rentStart={rentStart}
+        rentEnd={rentEnd}
+        rentStartTime={rentStartTime}
+        rentEndTime={rentEndTime}
+        onRentStartChange={setRentStart}
+        onRentEndChange={setRentEnd}
+        onRentStartTimeChange={setRentStartTime}
+        onRentEndTimeChange={setRentEndTime}
+        onSubmit={submitRequest}
+        onClose={() => setRequesting(null)}
+      />
 
-        <DetailsModal
-          equipment={selectedDetail}
-          onClose={() => setSelectedDetail(null)}
-          onRequestRent={handleRequestFromDetails}
-        />
-      </div>
+      <DetailsModal
+        equipment={selectedDetail}
+        onClose={() => setSelectedDetail(null)}
+        onRequestRent={handleRequestFromDetails}
+      />
     </div>
   )
 }

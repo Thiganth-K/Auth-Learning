@@ -10,6 +10,7 @@ export type Equipment = {
   description?: string
   pricePerDay: number
   image?: string
+  category: 'equipment' | 'lab'
 }
 
 export type RentalRequest = {
